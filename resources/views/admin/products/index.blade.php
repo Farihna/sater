@@ -27,14 +27,16 @@
                     <span class="selectgroup-button">Sapi</span>
                 </label>
                 <label class="selectgroup-item">
-                    <input type="radio" name="category_filter" value="pakan"
-                        class="selectgroup-input category-radio" />
+                    <input type="radio" name="category_filter" value="pakan" class="selectgroup-input category-radio" />
                     <span class="selectgroup-button">Pakan Sapi</span>
                 </label>
                 <label class="selectgroup-item">
-                    <input type="radio" name="category_filter" value="peralatan"
-                        class="selectgroup-input category-radio" />
-                    <span class="selectgroup-button">Peralatan Sapi</span>
+                    <input type="radio" name="category_filter" value="obat" class="selectgroup-input category-radio" />
+                    <span class="selectgroup-button">Obat Sapi</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input type="radio" name="category_filter" value="kebutuhan" class="selectgroup-input category-radio" />
+                    <span class="selectgroup-button">Kebutuhan Sapi</span>
                 </label>
             </div>
         </div>
@@ -63,126 +65,128 @@
                                 </tr>
                             </thead>
                             <tbody id="productBody">
-                                <!-- @php $i = 1; @endphp
-                                
-                                @foreach ($products as $product)
-
-                                    @if($product->category->nama === 'sapi' && $product->detailSapi)
-                                    <tr>
-                                        <td>{{ $i++ }}</td>
-                                        <td>
-                                            @if ($product->image_url)
-                                                <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->nama }}"
-                                                    width="50">
-                                            @endif
-                                        </td>
-                                        <td>{{ $product->nama }}</td>
-                                        <td>Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
-                                        <td>
-                                            {{ $product->stok }}
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('admin.products.edit', $product->id) }}"><i
-                                                    class="fa fa-edit"></i></a>
-                                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Are you sure to delete this product?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm text-danger"><i
-                                                        class="fa fa-times"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @endif
-                                @endforeach -->
+                                <!-- Data produk akan dimuat di sini melalui JavaScript -->
                             </tbody>
                         </table>
                         <script>
-                        document.addEventListener('DOMContentLoaded', () => {
-                            const radios = document.querySelectorAll('.category-radio');
-                            const productBody = document.querySelector('#productBody');
-                            const cardTitle = document.getElementById('card-title');
-
-                            // Fungsi untuk memuat produk berdasarkan kategori
-                            const loadProducts = (category) => {
-                                console.log('Kategori dipilih:', category);
-                                productBody.innerHTML = `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
-                                cardTitle.innerText = `Daftar Produk - ${category.toUpperCase()}`;
-
-                                fetch(`{{ route('admin.products.filter') }}?category=${category}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        console.log(data);
-                                        if (data.products && data.products.length > 0) {
-                                            let html = '';
-                                            data.products.forEach((p, index) => {
-                                                const imageUrl = p.image_url ? `/storage/${p.image_url}` : '/storage/products/no_image.jpg';
-
-                                                let detail = '';
-                                                if (p.detail_sapi) {
-                                                    detail = `
-                                                        <small>Berat: ${p.detail_sapi.berat} kg</small><br>
-                                                        <small>Usia: ${p.detail_sapi.usia}</small><br>
-                                                        <small>Gender: ${p.detail_sapi.gender}</small><br>
-                                                        <small>Sertifikat: ${p.detail_sapi.sertifikat_kesehatan}</small>
-                                                    `;
-                                                } else if (p.detail_pakan) {
-                                                    detail = `
-                                                        <small>Jenis Pakan: ${p.detail_pakan.jenis_pakan}</small><br>
-                                                        <small>Berat: ${p.detail_pakan.berat} kg</small>
-                                                    `;
-                                                } else if (p.detail_peralatan) {
-                                                    detail = `
-                                                        <small>Jenis: ${p.detail_peralatan.jenis_peralatan}</small><br>
-                                                        <small>Bahan: ${p.detail_peralatan.bahan}</small>
-                                                    `;
-                                                }
-
-                                                html += `
-                                                    <tr>
-                                                        <td>${index + 1}</td>
-                                                        <td><img src="${imageUrl}" alt="${p.nama}" width="50"></td>
-                                                        <td><b>${p.nama}</b><br>${detail}<br>${p.deskripsi}</td>
-                                                        <td>Rp ${parseInt(p.harga).toLocaleString('id-ID')}</td>
-                                                        <td>${p.stok}</td>
-                                                        <td>
-                                                            <a href="/dashboard/products/${p.id}/edit"><i class="fa fa-edit"></i></a>
-                                                            <form action="/dashboard/products/${p.id}" method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-sm text-danger" onclick="return confirm('Yakin ingin menghapus?')"><i class="fa fa-times"></i></button>
-                                                            </form>
-                                                        </td>
-                                                    </tr>
-                                                `;
-                                            });
-                                            productBody.innerHTML = html;
-                                        } else {
-                                            productBody.innerHTML = `<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>`;
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.error(err);
-                                        productBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Gagal memuat data</td></tr>`;
-                                    });
-                            };
-
-                            // Pasang event listener
-                            radios.forEach(radio => {
-                                radio.addEventListener('change', function() {
-                                    loadProducts(this.value);
-                                });
-                            });
-
-                            // 🔹 Load default kategori “Sapi” (atau radio yang checked)
-                            const checkedRadio = document.querySelector('.category-radio:checked');
-                            if (checkedRadio) {
-                                loadProducts(checkedRadio.value);
-                            }
-                        });
+                            // Variabel Laravel yang HARUS diproses oleh Blade sebelum JS dieksekusi
+                            const FILTER_ROUTE = '{{ route('admin.products.filter') }}';
+                            const CSRF_TOKEN = '{{ csrf_token() }}';
+                            const BASE_URL = '/dashboard/products/';
                         </script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const radios = document.querySelectorAll('.category-radio');
+                                const productBody = document.querySelector('#productBody');
+                                const cardTitle = document.getElementById('card-title');
 
+                                // Pastikan elemen global seperti FILTER_ROUTE dan CSRF_TOKEN sudah dideklarasikan di luar script.
+
+                                // Fungsi untuk memuat produk berdasarkan kategori
+                                const loadProducts = (category) => {
+                                    console.log('Kategori dipilih:', category);
+
+                                    // 1. Loading State
+                                    productBody.innerHTML = `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
+                                    cardTitle.innerText = `Daftar Produk - ${category.toUpperCase()}`;
+
+                                    // 2. Fetch Data (Menggunakan variabel global FILTER_ROUTE)
+                                    fetch(`${FILTER_ROUTE}?category=${category}`)
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error(`HTTP error! status: ${response.status}`);
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            console.log('Data diterima:', data);
+
+                                            if (data.products && data.products.length > 0) {
+                                                let html = '';
+
+                                                data.products.forEach((p, index) => {
+                                                    const imageUrl = p.image_url ? `/storage/${p.image_url}` : '/storage/products/no_image.jpg';
+
+                                                    let detail = '';
+                                                    if (p.detail_sapi) {
+                                                        detail = `
+                                                            <small>Berat: ${p.detail_sapi.berat || 'N/A'} kg</small><br>
+                                                            <small>Usia: ${p.detail_sapi.usia || 'N/A'}</small><br>
+                                                            <small>Gender: ${p.detail_sapi.gender || 'N/A'}</small><br>
+                                                            <small>Sertifikat: ${p.detail_sapi.sertifikat_kesehatan || 'Tidak Ada'}</small>
+                                                        `;
+                                                    } else if (p.detail_pakan) {
+                                                        detail = `
+                                                            <small>Jenis Pakan: ${p.detail_pakan.jenis_pakan || 'N/A'}</small><br>
+                                                            <small>Berat: ${p.detail_pakan.berat || 'N/A'} kg</small>
+                                                        `;
+                                                    } else if (p.detail_obat) {
+                                                        detail = `
+                                                            <small>Jenis: ${p.detail_obat.jenis_obat || 'N/A'}</small><br>
+                                                            <small>Bahan: ${p.detail_obat.bahan || 'N/A'}</small>
+                                                        `;
+                                                    } else if (p.detail_peralatan) {
+                                                        detail = `
+                                                            <small>Jenis: ${p.detail_peralatan.jenis_peralatan || 'N/A'}</small><br>
+                                                            <small>Bahan: ${p.detail_peralatan.bahan || 'N/A'}</small>
+                                                        `;
+                                                    }
+
+                                                    // Render Baris Tabel
+                                                    html += `
+                                                        <tr>
+                                                            <td>${index + 1}</td>
+                                                            <td><img src="${imageUrl}" alt="${p.nama}" width="50" class="img-thumbnail"></td>
+                                                            <td>
+                                                                <b>${p.nama}</b><br>
+                                                                ${detail}<br>
+                                                                <small>${p.deskripsi.substring(0, 50)}...</small>
+                                                            </td>
+                                                            <td>Rp ${Number(p.harga).toLocaleString('id-ID')}</td>
+                                                            <td>${p.stok}</td>
+                                                            <td>
+                                                                <a href="${BASE_URL}${p.id}/edit" class="btn btn-sm btn-info me-1"><i class="fa fa-edit"></i></a>
+
+                                                                <form action="${BASE_URL}${p.id}" method="POST" style="display:inline;">
+                                                                    <input type="hidden" name="_token" value="${CSRF_TOKEN}"> 
+                                                                    <input type="hidden" name="_method" value="DELETE"> 
+
+                                                                    <button type="submit" class="btn btn-sm text-danger" onclick="return confirm('Anda yakin ingin menghapus produk ini?')">
+                                                                        <i class="fa fa-times"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    `;
+                                                });
+
+                                                productBody.innerHTML = html;
+
+                                            } else {
+                                                // Tidak ada data
+                                                productBody.innerHTML = `<tr><td colspan="6" class="text-center">Tidak ada data produk di kategori ini.</td></tr>`;
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.error("Fetch Error:", err);
+                                            productBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Gagal memuat data. Periksa koneksi atau server.</td></tr>`;
+                                        });
+                                };
+
+                                // Pasang event listener
+                                radios.forEach(radio => {
+                                    radio.addEventListener('change', function () {
+                                        loadProducts(this.value);
+                                    });
+                                });
+
+                                // 🔹 Load default kategori saat halaman dimuat
+                                const checkedRadio = document.querySelector('.category-radio:checked');
+                                if (checkedRadio) {
+                                    loadProducts(checkedRadio.value);
+                                }
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

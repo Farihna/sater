@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detail_sapi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')
-                ->constrained('product')
+                ->constrained('products')
                 ->onDelete('cascade');
                 
             $table->decimal('berat', 8, 2);

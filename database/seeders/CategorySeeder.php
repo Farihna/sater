@@ -19,7 +19,8 @@ class CategorySeeder extends Seeder
         $items = [
             ['nama' => 'sapi', 'deskripsi' => 'Untuk hewan sapi'],
             ['nama' => 'pakan', 'deskripsi' => 'Untuk pakan sapi'],
-            ['nama' => 'peralatan', 'deskripsi' => 'Untuk peralatan sapi'],
+            ['nama' => 'obat', 'deskripsi' => 'Untuk obat sapi'],
+            ['nama' => 'kebutuhan', 'deskripsi' => 'Untuk kebutuhan sapi'],
         ];
 
         foreach ($items as $item) {

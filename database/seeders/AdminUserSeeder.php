@@ -17,14 +17,16 @@ class AdminUserSeeder extends Seeder
         User::create([
             'username' => 'superadmin',
             'email' => 'superadmin@gmail.com',
-            'role' => 'admin', // Role untuk akses penuh
+            'phone' => '1234567890',
+            'role' => 'admin',
             'password' => Hash::make('superadmin123'),
         ]);
 
         User::create([
             'username' => 'usertoko',
             'email' => 'usertoko@gmail.com',
-            'role' => 'user', // Role untuk user biasa
+            'phone' => '0987654321',
+            'role' => 'user',
             'password' => Hash::make('user123'),
         ]);
 

@@ -904,6 +904,34 @@ body {
     width: 0;
     display: none; }
 
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .user-info:hover {
+    background-color: rgba(255,255,255,0.1);
+  }
+
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--light-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+  }
+
 .btn-toggle {
   font-size: 20px !important;
   line-height: 20px;

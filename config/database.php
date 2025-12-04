@@ -63,6 +63,12 @@ return [
             ]) : [],
         ],
 
+        'sqlite_master' => [
+            'driver' => 'sqlite',
+            'database' => base_path('vendor/maftuhichsan/sqlite-wilayah-indonesia/records.sqlite'),
+            'prefix' => ''
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

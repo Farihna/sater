@@ -27,77 +27,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <!-- <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="mb-3 form-group form-group-default">
-                                    <label>Kategori</label>
-                                    <select name="category_id" class="form-select @error('category_id') is-invalid @enderror"
-                                        id="formGroupDefaultSelect" required>
-                                        <option value="">-- Pilih Kategori --</option>
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
-                                                {{ $cat->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Nama Produk</label>
-                                    <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
-                                        value="{{ old('nama') }}" required>
-                                    @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Deskripsi</label>
-                                    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror"
-                                        required>{{ old('deskripsi') }}</textarea>
-                                    @error('deskripsi')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Harga</label>
-                                    <input type="number" name="harga" step="0.01" class="form-control" value="{{ old('harga') }}"
-                                        required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Gambar</label>
-                                    <input type="file" name="image_url" class="form-control" accept="image/*">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Berat (kg)</label>
-                                    <input type="number" name="berat" step="0.01" class="form-control" value="{{ old('berat') }}"
-                                        required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Usia</label>
-                                    <input type="text" name="usia" class="form-control" value="{{ old('usia') }}" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Gender</label>
-                                    <select name="gender" class="form-select" required>
-                                        <option value="jantan">Jantan</option>
-                                        <option value="betina">Betina</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Sertifikat Kesehatan</label>
-                                    <input type="text" name="sertifikat_kesehatan" class="form-control" required>
-                                </div>
-
-                                <input type="hidden" name="status" value="available">
-
-                                <button type="submit" class="btn btn-primary rounded-3">Simpan</button>
-                                <a href="{{ route('admin.products.index') }}" class="btn btn-danger rounded-3">Batal</a>
-                            </form> -->
                     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -145,14 +74,20 @@
                             <input type="file" name="image_url" class="form-control" accept="image/*">
                         </div>
 
-                        <!-- field tambahan (dinamis) -->
+                        <div class="mb-3">
+                            <label>Status</label>
+                            <select name="status" class="form-select" required>
+                                <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Tersedia</option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Tidak Tersedia</option>
+                                <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            </select>
+                        </div>
+
                         <div id="detail-fields"></div>
 
                         <button type="submit" class="btn btn-primary rounded-3">Simpan</button>
                         <a href="{{ route('admin.products.index') }}" class="btn btn-danger rounded-3">Batal</a>
                     </form>
-
-                    <!-- script untuk menampilkan form berdasarkan kategori -->
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
                             const categorySelect = document.getElementById('category_id');
@@ -162,8 +97,7 @@
                                 let html = '';
 
                                 if (categoryId == 1) {
-                                    // === Kategori SAPI ===
-                                    html = `
+                                    html = `s
                                             <div class="mb-3"><label>Berat (kg)</label>
                                                 <input type="number" step="0.01" name="berat" class="form-control" required>
                                             </div>
@@ -182,7 +116,6 @@
                                             </div>
                                         `;
                                 } else if (categoryId == 2) {
-                                    // === Kategori PAKAN ===
                                     html = `
                                         <div class="mb-3"><label>Berat (kg)</label>
                                             <input type="number" name="berat" step="0.01" class="form-control" required>
@@ -195,11 +128,7 @@
 
                                 detailContainer.innerHTML = html;
                             }
-
-                            // Render awal jika ada old('category_id')
                             renderDetailFields(categorySelect.value);
-
-                            // Ubah tampilan field saat kategori dipilih
                             categorySelect.addEventListener('change', function () {
                                 renderDetailFields(this.value);
                             });

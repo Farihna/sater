@@ -19,7 +19,7 @@ class DetailSapi extends Model
         'sertifikat_kesehatan'
     ];
 
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function products(){
+        return $this->belongsTo(Products::class, 'product_id', 'id');
     }
 }

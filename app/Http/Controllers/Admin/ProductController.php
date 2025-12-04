@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use App\Models\Product;
+use App\Models\Products;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
-class ProductController extends AdminController
+class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['category', 'detailSapi', 'detailPakan'])->get();
+        $products = Products::with(['category', 'detailSapi', 'detailPakan'])->get();
         return view('admin.products.index', compact('products'));
     }
 
@@ -29,6 +32,7 @@ class ProductController extends AdminController
             'harga' => 'required|numeric|min:0',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'stok' => 'required|numeric|min:0',
+            'status' => 'required|in:active,inactive,pending',
         ]);
 
         if ($request->hasFile('image_url')) {
@@ -36,7 +40,13 @@ class ProductController extends AdminController
             $validated['image_url'] = $path;
         }
 
-        $product = Product::create($validated);
+        $prefixMap = [1 => 'SPI', 2 => 'PKN', 3 => 'OBT', 4 => 'KBN'];
+        $prefix = $prefixMap[$validated['category_id']] ?? 'PRD';
+        $sku = $prefix . '-' . date('Ym') . '-' . strtoupper(Str::random(6));
+
+        $user_id['user_id'] = Auth::id(); // atau $request->user()->id
+
+        $product = Products::create(['sku' => $sku] + $validated + $user_id);
 
         $categoryId = $request->category_id;
 
@@ -69,13 +79,13 @@ class ProductController extends AdminController
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
-    public function edit(Product $product)
+    public function edit(Products $product)
     {   
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Products $product)
     {
         
         $validated = $request->validate([
@@ -84,6 +94,8 @@ class ProductController extends AdminController
             'deskripsi' => 'required|string',
             'harga' => 'required|numeric|min:0',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'stok' => 'required|numeric|min:0',
+            'status' => 'required|in:active,inactive,pending',
         ]);
 
         if ($request->hasFile('image_url')) {
@@ -135,7 +147,7 @@ class ProductController extends AdminController
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Products $product)
     {
         if($product->image_url){
             Storage::disk('public')->delete($product->image_url);
@@ -152,7 +164,8 @@ class ProductController extends AdminController
         $categoryMap = [
             'sapi' => 1,
             'pakan' => 2,
-            'peralatan' => 3,
+            'obat' => 3,
+            'kebutuhan' => 4,
         ];
 
         $categoryId = $categoryMap[$category] ?? null;
@@ -161,7 +174,7 @@ class ProductController extends AdminController
             return response()->json(['error' => 'kategori tidak valid'], 400);
         }
 
-        $query = Product::where('category_id', $categoryId)->with(['detailSapi', 'detailPakan'])->orderBy('id', 'desc');
+        $query = Products::where('category_id', $categoryId)->with(['detailSapi', 'detailPakan'])->orderBy('id', 'desc');
 
         $products = $query->get();
 

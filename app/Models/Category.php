@@ -18,7 +18,7 @@ class Category extends Model
         'deskripsi',
     ];
 
-    public function product(){
-        return $this->hasMany(Product::class);
+    public function products(){
+        return $this->hasMany(Products::class);
     }
 }

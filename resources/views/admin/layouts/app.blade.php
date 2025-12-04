@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Sater - Admin</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-  <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="" type="image/x-icon" />
 
   <!-- Fonts and icons -->
   <script src="{{ asset('admin/js/plugin/webfont/webfont.min.js') }}"></script>
@@ -31,6 +31,8 @@
   <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/css/plugins.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/css/kaiadmin.min.css') }}" />
+  
+  @livewireStyles
 </head>
 
 <body>
@@ -105,4 +107,5 @@
       fillColor: "rgba(255, 165, 52, .14)",
     });
   </script>
+
 </body>

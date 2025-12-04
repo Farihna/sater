@@ -1,97 +1,87 @@
-<!-- Header Section Begin -->
-<header class="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="header__logo">
-                    <a href="./index.html" style="font-weight: bold; color: black; font-size: 35px;"><img src="{{ asset('store/img/logo_saterid.png') }}" height="50" alt=""></a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <nav class="header__menu">
-                    <ul>
-                        <li class="active"><a href="./index.html">Home</a></li>
-                        <li><a href="./shop-grid.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="header__menu__dropdown">
-                                <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
-                            </ul>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid mx-2">
+        <a class="navbar-brand" href="">
+            <img src="{{ asset('store/img/...') }}" style="height: 24px;" alt=""> Sater
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('products.index') }}">Produk</a>
+                </li>
+                @auth
+                    @if(Auth::user()->isPartner())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('partner.dashboard') }}">Produk Saya</a>
                         </li>
-                        <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contact</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-lg-3">
-                <div class="header__cart">
-                    <ul>
-                        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
-                        <li class="border border-dark border-1 rounded-pill"><a href="#" class="text-dark m-2"><i class="fa fa-user my-1"></i> Login</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="humberger__open">
-            <i class="fa fa-bars"></i>
-        </div>
-    </div>
-</header>
-<!-- Header Section End -->
+                    @endif
+                @endauth
+            </ul>
+            <ul class="navbar-nav">
+                @auth
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('checkout.index') }}">
+                        <div class="cart-icon-wrapper">
+                            <i class="bi bi-cart3 fs-5"></i>
+                            <span class="cart-badge" id="cartCount"></span>
+                        </div>
+                    </a>
+                </li>
+                @endauth
 
-
-<!-- Hero Section Begin -->
-<section class="hero">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="hero__categories">
-                    <div class="hero__categories__all">
-                        <i class="fa fa-bars"></i>
-                        <span>Menyediakan</span>
+                @guest
+                <li class="nav-item">
+                    <div class="separator-container">
+                        <span class="text-link"><a class="nav-link" href="{{ route('login') }}">Masuk</a></span>
+                        <span class="separator">|</span>
+                        <span class="text-link"><a class="nav-link" href="{{ route('register') }}">Daftar</a></span>
+                        <span class="separator">|</span>
+                        <span class="text-link"><a class="nav-link" href="{{ route('partner.register') }}">Daftar Mitra</a></span>
                     </div>
-                    <ul>
-                        <li><a href="#">Sapi</a></li>
-                        <li><a href="#">Pakan Sapi</a></li>
-                        <li><a href="#">Kebutuhan Sapi</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-9">
-                <div class="hero__search">
-                    <div class="hero__search__form">
-                        <form action="#">
-                            <div class="hero__search__categories">
-                                All Categories
-                                <span class="arrow_carrot-down"></span>
+                </li>
+                @endguest
+
+                @auth
+                    <li class="nav-item user-dropdown dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdownUser" role="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false" 
+                        style="padding: 0; display: flex; align-items: center; cursor: pointer;">
+                            <div class="user-info">
+                                <div class="user-avatar" id="userAvatar">{{ strtoupper(substr(Auth::user()->username ?? 'U', 0, 1)) }}</div>
+                                <span id="userName">{{ Auth::user()->username ?? 'User' }}</span>
+                                <i class="bi bi-chevron-down"></i>
                             </div>
-                            <input type="text" placeholder="What do yo u need?">
-                            <button type="submit" class="site-btn">SEARCH</button>
-                        </form>
-                    </div>
-                    <div class="hero__search__phone">
-                        <div class="hero__search__phone__icon">
-                            <i class="fa fa-phone"></i>
-                        </div>
-                        <div class="hero__search__phone__text">
-                            <h5>+62 80313213201</h5>
-                            <span>support 24/7 time</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero__item set-bg" data-setbg="{{ asset('store/img/hero/baner_sater.jpg') }}">
-                    <div class="hero__text">
-                        <span>SAPI TERBAIK</span>
-                        <h2>Sapi <br />Ternak</h2>
-                        <p>Tempat membeli sapi & <br>kebutuhan sapi terpercaya</p>
-                        <a href="#" class="primary-btn">SHOP NOW</a>
-                    </div>
-                </div>
-            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" id="userMenu" aria-labelledby="navbarDropdownUser">
+                            <li>
+                                <a href="{{ route('profile.settings') }}" class="dropdown-item user-menu-item">
+                                    <i class="bi bi-person-gear"></i> Pengaturan Akun
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('my.orders') }}" class="dropdown-item user-menu-item">
+                                    <i class="bi bi-box-seam"></i>Pesanan Saya
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a href="{{ route('logout') }}" class="dropdown-item user-menu-item"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right"></i> Keluar
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endauth
+            </ul>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
     </div>
-</section>
-<!-- Hero Section End -->
+</nav>

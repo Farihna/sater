@@ -16,7 +16,7 @@ class DetailPakan extends Model
         'jenis_pakan',
     ];
 
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function products(){
+        return $this->belongsTo(Products::class, 'product_id', 'id');
     }
 }
